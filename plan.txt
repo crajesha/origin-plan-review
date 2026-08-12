@@ -1,0 +1,378 @@
+Robotic Drywall Finishing
+
+First-Round Experimental Validation Plan | Apprentice — Experimentation
+& Systems Engineering
+
+Candidate: Chigateri Rajesha Date: 12 August 2026
+
+Problem framing. Repeated robot finishing trials produce inconsistent
+tapered-seam quality: underfill in the taper valley, excess material
+buildup, visible edge lines, and post-sand surface waviness. The brief
+does not identify a root cause. My objective is therefore to separate
+process variation from measurement variation and identify which
+subsystem(s) deserve the next round of controlled testing.
+
+1. System understanding
+
+[]
+
+Figure 1. System-level diagram — motion, end-effector, material,
+sensing, and geometry feed the finishing process, with environment and
+measurement method acting across the whole system.
+
+Key systems judgment: I would not start by blaming material. The same
+visible defect can be produced by different mechanisms — for example,
+underfill could reflect insufficient deposition, excessive speed,
+excessive standoff, or a material-state change. The first round should
+therefore test one representative factor per subsystem under matched
+conditions, while tracking measurement reliability and trial order.
+
+Drywall quality target. A correctly finished tapered seam should
+transition smoothly into the surrounding board so the joint is not
+visually or physically prominent after finishing/sanding. Underfill
+leaves the recess insufficiently filled; buildup leaves excess compound;
+edge lines indicate an abrupt/visible transition; waviness indicates
+residual surface non-flatness after sanding. These are quality
+departures, not merely sensor signals.
+
+Primary working hypothesis: the observed variation is likely
+multi-factor rather than a single-cause failure. My first-round goal is
+to determine whether the largest repeatable changes trace to motion,
+tool behavior, sensing/standoff, material state, or their interactions —
+not to declare a root cause from one trial.
+
+2. Experiment design
+
+Objective: quantify baseline repeatability, then screen representative
+controllable factors from the four major subsystems while holding
+geometry, measurement setup, and the remaining process settings fixed.
+
+Working hypotheses
+
+-   H1 — Motion: path velocity and tool orientation can change
+    deposition/finishing consistency and therefore seam profile,
+    underfill/buildup, or edge-line severity.
+
+-   H2 — End-effector: application-tool condition/rate and sanding
+    contact force can change material deposition and final surface
+    waviness.
+
+-   H3 — Sensing: standoff error or sensor calibration drift can create
+    real process changes and/or apparent quality changes; measurement
+    reliability must be validated before attributing process variation.
+
+-   H4 — Material: viscosity/mix-state variation can change how
+    consistently compound is deposited and finished.
+
+Important: these are testable hypotheses, not conclusions. Evidence for
+one factor should be interpreted only after its competing explanations
+are controlled.
+
+2.1 First-round run structure
+
+  --------------------------------------------------------------------------------
+  Block          Runs   Purpose                Design
+  -------------- ------ ---------------------- -----------------------------------
+  A — Baseline   4      Estimate inherent      Same nominal settings; repeat
+                        run-to-run variation   across time/order
+
+  B — Motion     4      Screen velocity /      2 levels x 2 repeats; all else
+                        orientation effect     fixed
+
+  C —            4      Screen                 2 levels x 2 repeats; all else
+  End-effector          tool/application       fixed
+                        effect                 
+
+  D — Sensing    4      Test                   2 controlled levels x 2 repeats;
+                        standoff/calibration   verify measurement setup
+                        sensitivity            
+
+  E — Material   4      Screen material-state  2 levels x 2 repeats; characterize
+                        effect                 material before run
+  --------------------------------------------------------------------------------
+
+Total = 20 runs. This is a screening plan, not a final optimization
+study. With only two repeats at each shifted level, the evidence is
+intentionally treated as directional; factors showing a clear and
+repeatable effect move to a stronger confirmatory test.
+
+2.2 Controls, disturbances and confounders
+
+  -------------------------------------------------------------------------
+  Category        Examples / control action
+  --------------- ---------------------------------------------------------
+  Controlled      Same seam geometry/panel type; same tool path except
+                  tested factor; same compound preparation protocol; same
+                  sanding procedure; same measurement fixture and
+                  camera/sensor pose.
+
+  Disturbances    Temperature/humidity; material aging during the session;
+                  tool wear; sensor thermal drift; panel-to-panel
+                  variation.
+
+  Confounders     Changing velocity and standoff together; allowing
+                  viscosity to drift with time; tool wear correlated with
+                  trial number; recalibrating only after poor runs;
+                  lighting changes between measurements.
+
+  Randomization / Randomize factor-level order where practical; interleave
+  blocking        baseline checks so drift is visible; record trial
+                  timestamp and tool/material state.
+  -------------------------------------------------------------------------
+
+Why this structure? A baseline block tells me how noisy the process is
+before I attribute differences to a factor. Interleaved baseline checks
+help expose drift. The four subsystem blocks provide a practical first
+screen without pretending a 20-run study can estimate every interaction.
+
+3. Measurement strategy
+
+Measurement principle: score the finished seam using the same physical
+region, fixture, sensor pose, lighting, and analysis method for every
+run. Capture measurements at defined process stages rather than relying
+on memory or a final visual impression.
+
+  --------------------------------------------------------------------------------
+  Metric       How I would measure        When                 Use
+  ------------ -------------------------- -------------------- -------------------
+  Seam profile Vision/ranging profile     After                Primary geometric
+  deviation    across a fixed             application/finish   quality signal
+               cross-section; compare     and after sanding    
+               measured profile with the                       
+               target/reference profile.                       
+
+  Flatness /   Profile deviation over a   After sanding        Detect residual
+  waviness     fixed seam length; report                       surface variation
+               a repeatable                                    
+               waviness/flatness metric.                       
+
+  Underfill /  Quantify signed profile    After finishing;     Distinguish too
+  buildup      deviation or classify      confirm after        little vs too much
+               against a predefined       sanding              compound
+               defect rubric; do not                           
+               change scoring rules                            
+               between trials.                                 
+
+  Edge-line    Fixed visual/geometry      After sanding        Capture visible
+  severity     score using the same                            transition defect
+               viewing setup and                               
+               reference examples.                             
+
+  Rework /     Record additional sanding  During/after         Practical
+  sanding      time/material/rework steps finishing            production impact
+  effort       required to reach                               
+               acceptance.                                     
+  --------------------------------------------------------------------------------
+
+3.1 Measurement-system reliability
+
+If imaging/ranging is used, the measurement system becomes another
+subsystem in the experiment. I would use a fixed camera/sensor mount,
+controlled lighting, a calibration artifact/reference surface before the
+session, and periodic calibration checks. Standoff should be recorded
+because a change in sensor-to-surface distance can look like a process
+change. For force-torque data, record zero/bias checks and watch for
+drift over time.
+
+Fair comparison rule: if a calibration check fails, flag the affected
+run rather than silently correcting the result after seeing the outcome.
+Re-run the measurement under a known-good setup where possible. This
+prevents measurement correction from becoming outcome-dependent.
+
+3.2 Primary response variable
+
+I would keep several physical metrics rather than collapsing everything
+immediately into one score. A composite quality score can hide
+trade-offs — for example, a seam with good flatness but visible edge
+lines. For screening, I would rank factors by consistent effect across
+the key metrics and by practical rework impact.
+
+4. Analysis and decision-making
+
+Step 1 — Establish baseline variation. Calculate run-to-run spread under
+nominal settings. This is the reference against which factor changes are
+judged.
+
+Step 2 — Compare within-factor contrasts. For each subsystem block,
+compare the two tested levels while keeping the other variables fixed.
+Examine the direction and size of the change across repeats, not a
+single best/worst run.
+
+Step 3 — Check drift and confounding. Plot results against trial
+order/time. If quality deteriorates monotonically, tool wear, material
+aging, or sensor drift may be responsible rather than the tested factor.
+
+Step 4 — Separate observation from conclusion. Example: “Higher velocity
+coincided with more underfill in both repeats” is an observation.
+“Velocity is the root cause” is not justified until material state,
+standoff, tool condition, and measurement reliability are controlled.
+
+Step 5 — Decide the next test from uncertainty. If one factor shows a
+repeatable effect, confirm it with more repeats and tighter controls. If
+two factors appear coupled, test their interaction. If results are
+noisy, first validate the measurement/process baseline rather than
+adding more factors.
+
+5. Experiment matrix / test plan
+
+The matrix below is the concrete first-round plan. “Low/High” means a
+deliberately separated, safe operating condition chosen from the actual
+system's validated range; the assessment does not provide numerical
+setpoints, so I would not invent them.
+
+  -------------------------------------------------------------------------------------
+  Trial   Subsystem / factor        Level        Reps   Key controls    Primary outputs
+  ------- ------------------------- ------------ ------ --------------- ---------------
+  B1–B2   Motion — path velocity    Low          2      Material, tool, Underfill;
+                                                        standoff,       profile
+                                                        geometry,       
+                                                        sensing         
+
+  B3–B4   Motion — path velocity    High         2      Same            Underfill;
+                                                                        profile
+
+  C1–C2   End-effector —            Nominal vs   2      Velocity,       Buildup; edge
+          application/tool          shifted             material,       line
+          condition                                     standoff        
+
+  C3–C4   End-effector — sander     Nominal vs   2      Velocity,       Waviness;
+          contact force             shifted             material,       sanding effort
+                                                        geometry        
+
+  D1–D2   Sensing — standoff        Nominal vs   2      Motion, tool,   Profile; edge
+                                    controlled          material        line
+                                    offset                              
+
+  D3–D4   Sensing —                 Nominal vs   2      Process held    Measurement
+          calibration/measurement   introduced          constant        repeatability
+          check                     check                               
+                                    condition                           
+
+  E1–E2   Material — viscosity/mix  Nominal vs   2      Motion, tool,   Underfill;
+          state                     controlled          standoff        buildup
+                                    shifted                             
+                                    state                               
+
+  E3–E4   Material —                Nominal vs   2      Motion, tool,   Profile; rework
+          rest/conditioning state   controlled          standoff        
+                                    shifted                             
+                                    state                               
+
+  A1–A4   Baseline                  Nominal      4      All nominal;    All quality
+                                                        repeated across metrics
+                                                        session         
+  -------------------------------------------------------------------------------------
+
+Note on the sensing block: the goal is not to intentionally damage or
+miscalibrate hardware. A controlled offset or calibration-check
+condition should be created only within a safe, known range or by using
+a measurement reference. If the actual sensor cannot be safely
+perturbed, replace this block with a repeated measurement-validation
+test.
+
+6. Practical risks and constraints
+
+  -------------------------------------------------------------------------
+  Risk            Effect on conclusion     Mitigation
+  --------------- ------------------------ --------------------------------
+  Small sample    A large-looking          Use repeated baseline; treat
+  size            difference may be noise. screening results as
+                                           directional; confirm finalists.
+
+  Material        Can masquerade as        Standardize mixing, record
+  inconsistency   motion/tool effects.     batch/time/rest state,
+                                           characterize viscosity where
+                                           practical.
+
+  Tool wear-in /  Trial order becomes      Record tool state; interleave
+  wear            correlated with tool     baseline checks; inspect tool
+                  condition.               condition.
+
+  Sensor drift /  Can create false process Pre/post calibration checks;
+  calibration     variation.               fixed fixture; log drift; flag
+                                           invalid measurements.
+
+  Panel geometry  Different seams may have Use matched panels/seam
+                  different intrinsic      geometry; block by panel if
+                  difficulty.              multiple panels are unavoidable.
+
+  Limited robot   Cannot test every        Screen representative factors
+  time            interaction.             first; reserve runs for
+                                           confirmation and strongest
+                                           interaction.
+  -------------------------------------------------------------------------
+
+7. Second-round prioritization — if only 15–20 runs are available
+
+I would not pre-commit the second round to a subsystem before seeing
+first-round evidence. Instead, I would rank candidates using three
+questions: (1) is the effect larger than baseline variation? (2) is it
+repeatable across trials and not explained by drift/confounding? (3)
+does it have a plausible physical mechanism and practical quality
+impact?
+
+  --------------------------------------------------------------------------
+  Priority      Runs    Purpose                  Decision rule
+  ------------- ------- ------------------------ ---------------------------
+  1. Confirm    5–6     Repeat the strongest     Effect persists and exceeds
+  top driver            first-round factor under baseline spread → promote
+                        tighter controls.        confidence.
+
+  2. Validate   3–4     Repeat reference         If measurement noise is
+  measurement           seam/measurement; check  large, fix measurement
+                        sensor or imaging        before process
+                        repeatability.           optimization.
+
+  3. Test       3–4     Confirm the next         If effect disappears,
+  second driver         strongest subsystem      first-round result may have
+                        factor.                  been noise/confounded.
+
+  4.            3–4     Test top two factors     Interaction matters if
+  Interaction           together if both survive combined effect differs
+                        confirmation.            materially from individual
+                                                 effects.
+  --------------------------------------------------------------------------
+
+7.1 Example decision logic
+
+-   If motion shows the clearest repeatable effect: confirm
+    velocity/orientation with more repeats, hold material viscosity and
+    standoff tightly, then test whether the effect remains after a
+    controlled tool-condition check.
+
+-   If material shows the clearest effect: characterize material state
+    first and repeat at controlled viscosity/rest conditions before
+    changing robot motion. This avoids blaming the robot for a feedstock
+    problem.
+
+-   If sensing/measurement is unstable: do not optimize the process yet.
+    First establish a trustworthy measurement baseline; otherwise the
+    experiment may optimize sensor artifacts.
+
+-   If two factors remain comparable: reserve runs for their
+    interaction. A factor that looks weak alone may matter when paired
+    with another subsystem state.
+
+8. Engineering conclusion
+
+My current read is deliberately provisional: the problem should be
+treated as a cross-subsystem variation problem. The highest-value first
+step is not selecting a root cause; it is establishing a reliable
+baseline and then screening one representative, controllable factor from
+motion, end-effector, sensing/standoff, and material under matched
+conditions. The dominant driver is the factor whose effect is
+repeatable, larger than baseline/measurement variation, physically
+plausible, and still present after confounders are controlled.
+
+This approach directly addresses the brief's emphasis on systems
+thinking, experimentation rigor, measurement discipline,
+analysis/judgment, and understanding of tapered-seam finish quality.
+Where the brief does not provide numerical setpoints or sensor
+specifications, I have stated assumptions rather than inventing them.
+
+Source basis: Origin's “Experimentation & Systems Engineering — Robotic
+Drywall Finishing” assessment brief and applicant brief supplied with
+the assessment. The assessment itself specifies a concise 2–4 page
+submission, a system-level diagram, an experiment matrix/test-plan
+table, explicit assumptions, and an optional 15–20 run second-round
+plan.
