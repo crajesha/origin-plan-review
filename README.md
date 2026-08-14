@@ -25,24 +25,6 @@ standalone (e.g. GitHub Pages) and it needs its own API key, you'll need to
 add a small backend proxy — never put a real Anthropic API key in
 client-side JS in a public repo.
 
-## Pushing to GitHub yourself
-
-Don't paste API keys or tokens into a chat with any AI assistant, including
-this one — treat them like passwords. To push this folder yourself:
-
-```bash
-cd plan-review-assistant
-git init
-git add .
-git commit -m "Add plan review assistant"
-git branch -M main
-git remote add origin https://github.com/<your-username>/<your-repo>.git
-git push -u origin main
-```
-
-If you want it live on the web (e.g. to open on your phone before the
-interview), enable **GitHub Pages** in the repo settings pointing at the
-`main` branch root — no extra config needed since it's a static file.
 
 ## Files
 
